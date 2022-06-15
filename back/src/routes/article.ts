@@ -25,4 +25,43 @@ router.post('/articles/post', auth, async (req, res) => {
   }
 });
 
+router.get('/articles/show', async (req, res) => {
+  try {
+    await db.query(
+      'select * from articles',
+      (error: string, result: { id: number; title: string; contents: string }) => {
+        res.status(200).json({
+          result: true,
+          main: result,
+        });
+      },
+    );
+  } catch (error) {
+    res.json(401).json({
+      result: false,
+      message: 'error occured during the inquire',
+    });
+  }
+});
+
+router.get('/articles/:article/show', async (req, res) => {
+  try {
+    await db.query(
+      'select * from articles where id=?',
+      req.params.article,
+      (error: string, result: { id: number; title: string; contents: string }) => {
+        res.status(200).json({
+          result: true,
+          detail: result,
+        });
+      },
+    );
+  } catch (error) {
+    res.json(401).json({
+      result: false,
+      message: 'error occured during the inquire',
+    });
+  }
+});
+
 export default router;

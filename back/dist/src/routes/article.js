@@ -33,4 +33,36 @@ router.post('/articles/post', auth_1.default, (req, res) => __awaiter(void 0, vo
         });
     }
 }));
+router.get('/articles/show', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield DBindex_1.default.query('select * from articles', (error, result) => {
+            res.status(200).json({
+                result: true,
+                main: result,
+            });
+        });
+    }
+    catch (error) {
+        res.json(401).json({
+            result: false,
+            message: 'error occured during the inquire',
+        });
+    }
+}));
+router.get('/articles/:article/show', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield DBindex_1.default.query('select * from articles where id=?', req.params.article, (error, result) => {
+            res.status(200).json({
+                result: true,
+                detail: result,
+            });
+        });
+    }
+    catch (error) {
+        res.json(401).json({
+            result: false,
+            message: 'error occured during the inquire',
+        });
+    }
+}));
 exports.default = router;
