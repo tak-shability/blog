@@ -25,7 +25,7 @@ router.post('/users/signup', (req, res) => __awaiter(void 0, void 0, void 0, fun
         const encrypted = crypto_js_1.default.AES.encrypt(JSON.stringify(password), privateKey).toString();
         yield DBindex_1.default.query('insert into users(userID, password) values(?, ?)', [userID, encrypted], (error, result) => {
             if (error) {
-                res.status(401).json({
+                return res.status(401).json({
                     result: false,
                     message: '중복된 아이디가 있습니다. 다시 가입해주세요.',
                 });
@@ -44,12 +44,17 @@ router.post('/users/signup', (req, res) => __awaiter(void 0, void 0, void 0, fun
 }));
 router.post('/users/signin', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userID, password } = req.body;
+    console.log('userID === ', userID);
     try {
-        const privateKey = process.env.SECRET_KEY;
-        const encrypted = crypto_js_1.default.AES.encrypt(JSON.stringify(password), privateKey).toString();
-        yield DBindex_1.default.query('select * from users where userID=?, password=?', [userID, encrypted], (error, result) => {
+        const decryptedPassword = yield DBindex_1.default.query('select * from users where userID=?', userID, (error, result) => {
+            const bytes = crypto_js_1.default.AES.decrypt(result[0].password, process.env.SECRET_KEY);
+            console.log('bytes === ', bytes);
+            return JSON.parse(bytes.toString(crypto_js_1.default.enc.Utf8));
+        });
+        console.log('decryptedPassword === ', decryptedPassword);
+        yield DBindex_1.default.query('select * from users where userID=?, password=?', [userID, decryptedPassword], (error, result) => {
             if (!result) {
-                res.status(400).json({
+                return res.status(400).json({
                     result: false,
                     message: '존재하지 않는 회원입니다.',
                 });

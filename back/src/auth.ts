@@ -4,14 +4,14 @@ require('dotenv').config();
 
 const auth = async (req: Request, res: Response) => {
   const { authorization } = req.headers;
-  if (!authorization) res.status(400).json({ result: false, errorMessage: '로그인 후 사용하시오' });
+  if (!authorization) res.status(400).json({ result: false, message: '접근권한이 없습니다. 로그인 후 사용하세요.' });
 
   const [tokenType, tokenValue] = authorization!.split(' ');
 
   if (tokenType !== 'Bearer') {
     res.status(401).json({
       result: false,
-      errorMessage: '로그인 후 사용하시오',
+      message: '접근권한이 없습니다. 로그인 후 사용하세요.',
     });
   }
 
@@ -20,7 +20,7 @@ const auth = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(401).json({
       result: false,
-      errorMessage: '로그인 후 사용하시오',
+      message: '접근권한이 없습니다. 로그인 후 사용하세요.',
     });
   }
 };
