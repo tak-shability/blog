@@ -48,10 +48,11 @@ router.post('/users/signin', (req, res) => __awaiter(void 0, void 0, void 0, fun
     try {
         const decryptedPassword = yield DBindex_1.default.query('select * from users where userID=?', userID, (error, result) => {
             const bytes = crypto_js_1.default.AES.decrypt(result[0].password, process.env.SECRET_KEY);
+            console.log('result[0] === ', result[0]);
             console.log('bytes === ', bytes);
             return JSON.parse(bytes.toString(crypto_js_1.default.enc.Utf8));
         });
-        console.log('decryptedPassword === ', decryptedPassword);
+        // console.log('decryptedPassword === ', decryptedPassword);
         yield DBindex_1.default.query('select * from users where userID=?, password=?', [userID, decryptedPassword], (error, result) => {
             if (!result) {
                 return res.status(400).json({
@@ -64,7 +65,7 @@ router.post('/users/signin', (req, res) => __awaiter(void 0, void 0, void 0, fun
             }, process.env.TOKEN_SECRET_KEY);
             res.status(200).json({
                 result: true,
-                token,
+                token: token,
             });
         });
     }

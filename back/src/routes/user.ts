@@ -36,39 +36,38 @@ router.post('/users/signup', async (req, res) => {
 
 router.post('/users/signin', async (req, res) => {
   const { userID, password } = req.body;
-  console.log('userID === ', userID);
   try {
-    const decryptedPassword = await db.query(
+    const privateKey: string | undefined = process.env.SECRET_KEY;
+    await db.query(
       'select * from users where userID=?',
       userID,
       (error: string, result: [{ id: number; userID: string; password: string }]) => {
-        const bytes = cryptojs.AES.decrypt(result[0].password, process.env.SECRET_KEY!);
-        console.log('bytes === ', bytes);
-        return JSON.parse(bytes.toString(cryptojs.enc.Utf8));
-      },
-    );
-    // console.log('decryptedPassword === ', decryptedPassword);
-    await db.query(
-      'select * from users where userID=?, password=?',
-      [userID, decryptedPassword],
-      (error: string, result: { id: number; userID: string; password: string }) => {
-        if (!result) {
+        if (result.length < 1) {
+          console.log('if문 걸림');
           return res.status(400).json({
             result: false,
             message: '존재하지 않는 회원입니다.',
           });
         }
-        const token = jwt.sign(
-          {
-            userID: result.id,
-          },
-          process.env.TOKEN_SECRET_KEY!,
-        );
-
-        res.status(200).json({
-          result: true,
-          token: token,
-        });
+        const bytes = cryptojs.AES.decrypt(result[0].password, privateKey!);
+        const decrypted = JSON.parse(bytes.toString(cryptojs.enc.Utf8));
+        if (password === decrypted) {
+          const token = jwt.sign(
+            {
+              userID: result[0].id,
+            },
+            process.env.TOKEN_SECRET_KEY!,
+          );
+          res.status(200).json({
+            result: true,
+            token: token,
+          });
+        } else {
+          res.status(400).json({
+            result: false,
+            message: '비밀번호가 틀립니다. 다시 확인해주세요.',
+          });
+        }
       },
     );
   } catch (error) {
