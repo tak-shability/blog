@@ -14,22 +14,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 require('dotenv').config();
-const auth = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { authorization } = req.headers;
     if (!authorization)
-        res.status(400).json({ result: false, message: '접근권한이 없습니다. 로그인 후 사용하세요.' });
+        return res.status(400).json({ result: false, message: '접근권한이 없습니다. 로그인 후 사용하세요.' });
     const [tokenType, tokenValue] = authorization.split(' ');
     if (tokenType !== 'Bearer') {
-        res.status(401).json({
+        return res.status(401).json({
             result: false,
             message: '접근권한이 없습니다. 로그인 후 사용하세요.',
         });
     }
     try {
         res.locals.user = yield jsonwebtoken_1.default.verify(tokenValue, process.env.TOKEN_SECRET_KEY);
+        next();
     }
     catch (error) {
-        res.status(401).json({
+        return res.status(401).json({
             result: false,
             message: '접근권한이 없습니다. 로그인 후 사용하세요.',
         });

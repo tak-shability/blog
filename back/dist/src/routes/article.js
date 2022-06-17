@@ -19,6 +19,7 @@ const auth_1 = __importDefault(require("../auth"));
 const router = express_1.default.Router();
 router.post('/articles/post', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, contents } = req.body;
+    console.log('req.body === ', req.body);
     try {
         yield DBindex_1.default.query('insert into articles(title, contents) values (?, ?)', [title, contents], (error, result) => {
             res.status(201).json({
@@ -35,7 +36,7 @@ router.post('/articles/post', auth_1.default, (req, res) => __awaiter(void 0, vo
 }));
 router.get('/articles/show', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield DBindex_1.default.query('select * from articles', (error, result) => {
+        yield DBindex_1.default.query('select id, title from articles', (error, result) => {
             res.status(200).json({
                 result: true,
                 main: result,

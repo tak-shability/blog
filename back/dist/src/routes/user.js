@@ -44,29 +44,33 @@ router.post('/users/signup', (req, res) => __awaiter(void 0, void 0, void 0, fun
 }));
 router.post('/users/signin', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userID, password } = req.body;
-    console.log('userID === ', userID);
     try {
-        const decryptedPassword = yield DBindex_1.default.query('select * from users where userID=?', userID, (error, result) => {
-            const bytes = crypto_js_1.default.AES.decrypt(result[0].password, process.env.SECRET_KEY);
-            console.log('result[0] === ', result[0]);
-            console.log('bytes === ', bytes);
-            return JSON.parse(bytes.toString(crypto_js_1.default.enc.Utf8));
-        });
-        // console.log('decryptedPassword === ', decryptedPassword);
-        yield DBindex_1.default.query('select * from users where userID=?, password=?', [userID, decryptedPassword], (error, result) => {
-            if (!result) {
+        const privateKey = process.env.SECRET_KEY;
+        yield DBindex_1.default.query('select * from users where userID=?', userID, (error, result) => {
+            if (result.length < 1) {
+                console.log('if문 걸림');
                 return res.status(400).json({
                     result: false,
                     message: '존재하지 않는 회원입니다.',
                 });
             }
-            const token = jsonwebtoken_1.default.sign({
-                userID: result.id,
-            }, process.env.TOKEN_SECRET_KEY);
-            res.status(200).json({
-                result: true,
-                token: token,
-            });
+            const bytes = crypto_js_1.default.AES.decrypt(result[0].password, privateKey);
+            const decrypted = JSON.parse(bytes.toString(crypto_js_1.default.enc.Utf8));
+            if (password === decrypted) {
+                const token = jsonwebtoken_1.default.sign({
+                    userID: result[0].id,
+                }, process.env.TOKEN_SECRET_KEY);
+                res.status(200).json({
+                    result: true,
+                    token: token,
+                });
+            }
+            else {
+                res.status(400).json({
+                    result: false,
+                    message: '비밀번호가 틀립니다. 다시 확인해주세요.',
+                });
+            }
         });
     }
     catch (error) {
