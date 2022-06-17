@@ -1,0 +1,19 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "### 1. 기능 : 회원가입, 로그인, 글의 작성/조회/상세 조회",
+  "main": "main.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tak-shability/blog.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tak-shability/blog/issues"
+  },
+  "homepage": "https://github.com/tak-shability/blog#readme"
+}
