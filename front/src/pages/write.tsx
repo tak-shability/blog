@@ -1,38 +1,46 @@
-import React from 'react';
+import useInput from '../hooks/useInput';
+import React, { useCallback, useState } from 'react';
 import axios from 'axios';
+import { Input } from 'antd';
 
-const sendArticle = () => {
-  console.log('실행됨');
-  const title = document.getElementById('title');
-  const contents = document.getElementById('contents');
+const Write = () => {
+  const [title, setTitle] = useInput('');
+  const [contents, setContents] = useInput('');
 
-  axios
-    .post('http://localhost:1000/api/article/post', {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      body: { title: title, contents: contents },
-    })
-    .then(function (response) {
-      console.log(response);
-      window.location.href = '/';
-    })
-    .catch(function (err) {
-      console.log(err);
-      alert(err.response);
-    });
-};
+  const sendArticle = () => {
+    const token = localStorage.getItem('token');
+    axios
+      .post(
+        'http://localhost:1000/api/articles/post',
+        {
+          title: title,
+          contents: contents,
+        },
+        { headers: { authorization: `Bearer ${token}` } },
+      )
+      .then(function (response) {
+        window.location.href = '/';
+      })
+      .catch(function (err) {
+        console.log(err.response.data);
+        alert(err.response.data);
+      });
+  };
 
-const write = () => {
   return (
-    <div>
-      <br />
-      <label id="title">
-        Title: <textarea id="contents" />
-      </label>
-      <hr></hr>
-      <div></div>
-      <textarea id="contents" />
-      <button onClick={sendArticle}> Submit </button>
-    </div>
+    <>
+      <div>
+        <p style={{ color: 'blue' }}>Write</p>
+        <p>Title</p>
+        <Input type="text" id="id" name="id" value={title} onChange={setTitle} />
+      </div>
+      <div>
+        <p>Contents</p>
+        <Input type="text" id="id" name="id" value={contents} onChange={setContents} />
+      </div>
+      <button onClick={sendArticle}>Send</button>
+    </>
   );
 };
-export default write;
+
+export default Write;

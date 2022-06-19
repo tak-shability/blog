@@ -1,4 +1,42 @@
-const login = () => {
-  return <h1>login</h1>;
+import useInput from '../hooks/useInput';
+import React, { useCallback, useState } from 'react';
+import axios from 'axios';
+import { Input } from 'antd';
+
+const Login = () => {
+  const [userID, setUserID] = useInput('');
+  const [password, setPassword] = useInput('');
+
+  const sendLogin = () => {
+    axios
+      .post('http://localhost:1000/api/users/login', {
+        userID: userID,
+        password: password,
+      })
+      .then(function (response) {
+        localStorage.setItem('token', response.data.token);
+        window.location.href = '/';
+      })
+      .catch(function (err) {
+        console.log(err.response.data);
+        alert(err.response);
+      });
+  };
+
+  return (
+    <>
+      <div>
+        <p style={{ color: 'blue' }}>Login</p>
+        <p>ID</p>
+        <Input type="text" id="id" name="id" value={userID} onChange={setUserID} />
+      </div>
+      <div>
+        <p>password</p>
+        <Input type="text" id="id" name="id" value={password} onChange={setPassword} />
+      </div>
+      <button onClick={sendLogin}>Send</button>
+    </>
+  );
 };
-export default login;
+
+export default Login;
