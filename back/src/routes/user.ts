@@ -35,7 +35,7 @@ router.post('/users/signup', async (req, res) => {
   }
 });
 
-router.post('/users/signin', async (req, res) => {
+router.post('/users/login', async (req, res) => {
   const { userID, password } = req.body;
   try {
     const privateKey: string | undefined = process.env.SECRET_KEY;

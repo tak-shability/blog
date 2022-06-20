@@ -15,7 +15,7 @@ const Signup = () => {
       })
       .then(function (response) {
         console.log(response);
-        window.location.href = '/';
+        window.location.href = '/login';
       })
       .catch(function (err) {
         console.log(err.response.data);
@@ -26,6 +26,7 @@ const Signup = () => {
   return (
     <>
       <div>
+        <p style={{ color: 'blue' }}>Signup</p>
         <p>ID</p>
         <Input type="text" id="id" name="id" value={userID} onChange={setUserID} />
       </div>

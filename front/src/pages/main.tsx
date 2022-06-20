@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import ArticleList from '../components/Article';
+import Atricles from '../components/Article';
 
 const main = () => {
   return (
@@ -9,11 +9,21 @@ const main = () => {
         <h1>Article List</h1>
       </div>
       <div>
-        <Link to="/write">
-          <button>New Post</button>
+        <Link to="/signup">
+          <button>Signup</button>
         </Link>
       </div>
-      <ArticleList />
+      <div>
+        <Link to="/login">
+          <button>Login</button>
+        </Link>
+      </div>
+      <div>
+        <Link to="/write">
+          <button>Write</button>
+        </Link>
+      </div>
+      <Atricles />
     </div>
   );
 };
