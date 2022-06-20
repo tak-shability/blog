@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.post('/users/signup', async (req, res) => {
   const { userID, password } = req.body;
+  console.log('req.body === ', req.body);
   try {
     const privateKey: string | undefined = process.env.SECRET_KEY;
     const encrypted = cryptojs.AES.encrypt(JSON.stringify(password), privateKey!).toString();
