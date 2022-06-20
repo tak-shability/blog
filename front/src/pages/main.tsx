@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Atricles from '../components/Article';
+import MainAtricles from '../components/MainArticle';
 
 const main = () => {
   return (
@@ -23,7 +23,7 @@ const main = () => {
           <button>Write</button>
         </Link>
       </div>
-      <Atricles />
+      <MainAtricles />
     </div>
   );
 };
