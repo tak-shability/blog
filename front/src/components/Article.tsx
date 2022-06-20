@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const Atricles = () => {
+const Atricles: Function = () => {
   const [articles, setArticles] = useState(new Array());
   useEffect(() => {
     axios
@@ -13,7 +13,10 @@ const Atricles = () => {
         alert(err?.response.data);
       });
   }, []);
-  return <div>{articles.map((v) => `${v.title}\n`)}</div>;
+
+  return articles.map((c, i) => {
+    return <div key={articles[i].id}>{articles[i].title}</div>;
+  });
 };
 
 export default Atricles;
