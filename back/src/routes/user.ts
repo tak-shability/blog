@@ -44,7 +44,6 @@ router.post('/users/login', async (req, res) => {
       userID,
       (error: string, result: [{ id: number; userID: string; password: string }]) => {
         if (result.length < 1) {
-          console.log('if문 걸림');
           return res.status(400).json({
             result: false,
             message: '존재하지 않는 회원입니다.',
@@ -59,6 +58,13 @@ router.post('/users/login', async (req, res) => {
             },
             process.env.TOKEN_SECRET_KEY!,
           );
+
+          req.session.save(() => {
+            console.log(req.session);
+            console.log(req.sessionID);
+            console.log('session 저장 완료');
+          });
+
           res.status(200).json({
             result: true,
             token: token,

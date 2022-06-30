@@ -1,5 +1,5 @@
 import useInput from '../hooks/useInput';
-import React, { useCallback, useState } from 'react';
+// import React, { useCallback, useState } from 'react';
 import axios from 'axios';
 import { Input } from 'antd';
 
@@ -23,7 +23,7 @@ const Write = () => {
       })
       .catch(function (err) {
         console.log(err.response.data);
-        alert(err.response.data);
+        alert(JSON.stringify(err.response.data));
       });
   };
 

@@ -5,7 +5,7 @@ import auth from '../auth';
 
 const router = express.Router();
 
-router.post('/articles/post', auth, async (req, res) => {
+router.post('/articles/post', async (req, res) => {
   const { title, contents } = req.body;
   console.log('req.body === ', req.body);
   try {

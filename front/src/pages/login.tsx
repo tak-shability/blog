@@ -1,5 +1,5 @@
 import useInput from '../hooks/useInput';
-import React, { useCallback, useState } from 'react';
+// import React, { useCallback, useState } from 'react';
 import axios from 'axios';
 import { Input } from 'antd';
 
@@ -14,7 +14,9 @@ const Login = () => {
         password: password,
       })
       .then(function (response) {
+        console.log('response === ', response);
         localStorage.setItem('token', response.data.token);
+        // sessionStorage.setItem('sid', response.data.session);
         window.location.href = '/';
       })
       .catch(function (err) {
