@@ -20,6 +20,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const router = express_1.default.Router();
 router.post('/users/signup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userID, password } = req.body;
+    console.log('req.body === ', req.body);
     try {
         const privateKey = process.env.SECRET_KEY;
         const encrypted = crypto_js_1.default.AES.encrypt(JSON.stringify(password), privateKey).toString();
@@ -42,13 +43,12 @@ router.post('/users/signup', (req, res) => __awaiter(void 0, void 0, void 0, fun
         });
     }
 }));
-router.post('/users/signin', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/users/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userID, password } = req.body;
     try {
         const privateKey = process.env.SECRET_KEY;
         yield DBindex_1.default.query('select * from users where userID=?', userID, (error, result) => {
             if (result.length < 1) {
-                console.log('if문 걸림');
                 return res.status(400).json({
                     result: false,
                     message: '존재하지 않는 회원입니다.',
@@ -60,6 +60,11 @@ router.post('/users/signin', (req, res) => __awaiter(void 0, void 0, void 0, fun
                 const token = jsonwebtoken_1.default.sign({
                     userID: result[0].id,
                 }, process.env.TOKEN_SECRET_KEY);
+                req.session.save(() => {
+                    console.log(req.session);
+                    console.log(req.sessionID);
+                    console.log('session 저장 완료');
+                });
                 res.status(200).json({
                     result: true,
                     token: token,

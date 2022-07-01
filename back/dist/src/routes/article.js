@@ -15,9 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config();
 const express_1 = __importDefault(require("express"));
 const DBindex_1 = __importDefault(require("../DBindex"));
-const auth_1 = __importDefault(require("../auth"));
 const router = express_1.default.Router();
-router.post('/articles/post', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/articles/post', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, contents } = req.body;
     console.log('req.body === ', req.body);
     try {

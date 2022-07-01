@@ -15,8 +15,8 @@ const Login = () => {
       })
       .then(function (response) {
         console.log('response === ', response);
-        localStorage.setItem('token', response.data.token);
-        // sessionStorage.setItem('sid', response.data.session);
+        localStorage.setItem('isLogin', response.data.token);
+        sessionStorage.setItem('isLogin', response.data.session);
         window.location.href = '/';
       })
       .catch(function (err) {

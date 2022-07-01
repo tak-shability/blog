@@ -8,7 +8,7 @@ const Write = () => {
   const [contents, setContents] = useInput('');
 
   const sendArticle = () => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('isLogin');
     axios
       .post(
         'http://localhost:1000/api/articles/post',
@@ -23,7 +23,8 @@ const Write = () => {
       })
       .catch(function (err) {
         console.log(err.response.data);
-        alert(JSON.stringify(err.response.data));
+        alert(JSON.stringify(err.response.data.message));
+        window.history.back();
       });
   };
 

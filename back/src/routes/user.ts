@@ -59,15 +59,15 @@ router.post('/users/login', async (req, res) => {
             process.env.TOKEN_SECRET_KEY!,
           );
 
-          req.session.save(() => {
-            console.log(req.session);
-            console.log(req.sessionID);
-            console.log('session 저장 완료');
-          });
+          req.session.numID = result[0].id;
+          req.session.userID = result[0].userID;
 
-          res.status(200).json({
-            result: true,
-            token: token,
+          req.session.save(() => {
+            res.status(200).json({
+              result: true,
+              token: token,
+              session: req.sessionID,
+            });
           });
         } else {
           res.status(400).json({

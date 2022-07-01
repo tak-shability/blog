@@ -6,9 +6,6 @@ import db from './DBindex';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import session from 'express-session';
-import cookieParser from 'cookie-parser';
-const fileStore = require('session-file-store')(session);
-const MYSQLStore = require('express-mysql-session')(session);
 
 const app = express();
 
@@ -25,28 +22,28 @@ app.use(
   }),
 );
 
-// app.use(cookieParser('secret'));
-// app.use(
-//   session({
-//     name: 'mycookie',
-//     secret: 'secret',
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: {
-//       httpOnly: true,
-//       maxAge: 60000,
-//     },
-//     store: new MYSQLStore({}, db),
-//   }),
-// );
-
 app.use(
   session({
-    secret: 'hello',
+    secret: 'secret',
     resave: false,
     saveUninitialized: true,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 3,
+      secure: false,
+    },
   }),
 );
+
+app.use('/session', (req, res) => {
+  const { sessionID, cookies } = req;
+  console.log('sessionID === ', sessionID);
+  console.log('cookies === ', cookies);
+
+  res.json({
+    sessionID,
+    cookies,
+  });
+});
 
 app.use('/api', [userRouter, articleRouter]);
 
