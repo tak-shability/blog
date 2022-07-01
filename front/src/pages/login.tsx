@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Input } from 'antd';
 
 const Login = () => {
+  console.log('로그인 화면 렌더링');
   const [userID, setUserID] = useInput('');
   const [password, setPassword] = useInput('');
 
@@ -14,7 +15,6 @@ const Login = () => {
         password: password,
       })
       .then(function (response) {
-        console.log('response === ', response);
         localStorage.setItem('isLogin', response.data.token);
         sessionStorage.setItem('isLogin', response.data.session);
         window.location.href = '/';

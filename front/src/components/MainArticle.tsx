@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const MainAtricles = () => {
+  console.log('메인화면 렌더링');
   const [articles, setArticles] = useState(new Array());
   useEffect(() => {
     axios

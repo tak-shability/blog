@@ -7,7 +7,7 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
   if (!authorization)
     return res.status(400).json({ result: false, message: '접근권한이 없습니다. 로그인 후 사용하세요.' });
 
-  const [tokenType, tokenValue] = authorization!.split(' ');
+  const [tokenType, tokenValue] = authorization.split(' ');
 
   if (tokenType !== 'Bearer') {
     return res.status(401).json({
