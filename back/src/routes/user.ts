@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.post('/users/signup', async (req, res) => {
   const { userID, password } = req.body;
-  console.log('req.body === ', req.body);
   try {
     const privateKey: string | undefined = process.env.SECRET_KEY;
     const encrypted = cryptojs.AES.encrypt(JSON.stringify(password), privateKey!).toString();
@@ -52,21 +51,12 @@ router.post('/users/login', async (req, res) => {
         const bytes = cryptojs.AES.decrypt(result[0].password, privateKey!);
         const decrypted = JSON.parse(bytes.toString(cryptojs.enc.Utf8));
         if (password === decrypted) {
-          const token = jwt.sign(
-            {
-              userID: result[0].id,
-            },
-            process.env.TOKEN_SECRET_KEY!,
-          );
-
           req.session.numID = result[0].id;
           req.session.userID = result[0].userID;
 
           req.session.save(() => {
             res.status(200).json({
               result: true,
-              token: token,
-              session: req.sessionID,
             });
           });
         } else {

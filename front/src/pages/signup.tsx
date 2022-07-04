@@ -14,7 +14,6 @@ const Signup = () => {
         password: password,
       })
       .then(function (response) {
-        console.log(response);
         window.location.href = '/login';
       })
       .catch(function (err) {

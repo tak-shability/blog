@@ -3,11 +3,10 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const MainAtricles = () => {
-  console.log('메인화면 렌더링');
   const [articles, setArticles] = useState(new Array());
   useEffect(() => {
     axios
-      .get('http://localhost:1000/api/articles/show')
+      .get('http://localhost:1000/api/articles/show', { withCredentials: true })
       .then(function (response) {
         setArticles(response?.data.main);
       })
@@ -15,11 +14,6 @@ const MainAtricles = () => {
         alert(err?.response.data);
       });
   }, []);
-
-  // return articles.map((c, i) => {
-  //   console.log(articles);
-  //   return <Link to={`/article/${articles[i].id}`} key={articles[i].id}>{`제목: ${articles[i].title}`}</Link>;
-  // });
 
   return (
     <>

@@ -6,6 +6,7 @@ import db from './DBindex';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import session from 'express-session';
+const MySQLStore = require('express-mysql-session')(session);
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.use(
   }),
 );
 
+const sessionStore = new MySQLStore({}, db);
+
 app.use(
   session({
     secret: 'secret',
@@ -31,19 +34,9 @@ app.use(
       maxAge: 1000 * 60 * 60 * 24 * 3,
       secure: false,
     },
+    store: sessionStore,
   }),
 );
-
-app.use('/session', (req, res) => {
-  const { sessionID, cookies } = req;
-  console.log('sessionID === ', sessionID);
-  console.log('cookies === ', cookies);
-
-  res.json({
-    sessionID,
-    cookies,
-  });
-});
 
 app.use('/api', [userRouter, articleRouter]);
 

@@ -1,5 +1,4 @@
 import useInput from '../hooks/useInput';
-// import React, { useCallback, useState } from 'react';
 import axios from 'axios';
 import { Input } from 'antd';
 
@@ -8,7 +7,6 @@ const Write = () => {
   const [contents, setContents] = useInput('');
 
   const sendArticle = () => {
-    const token = sessionStorage.getItem('isLogin');
     axios
       .post(
         'http://localhost:1000/api/articles/post',
@@ -16,7 +14,7 @@ const Write = () => {
           title: title,
           contents: contents,
         },
-        { headers: { authorization: `Bearer ${token}` } },
+        { withCredentials: true },
       )
       .then(function (response) {
         window.location.href = '/';

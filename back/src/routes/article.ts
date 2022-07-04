@@ -7,7 +7,6 @@ const router = express.Router();
 
 router.post('/articles/post', auth, async (req, res) => {
   const { title, contents } = req.body;
-  console.log('req.body === ', req.body);
   try {
     await db.query(
       'insert into articles(title, contents) values (?, ?)',
@@ -28,15 +27,12 @@ router.post('/articles/post', auth, async (req, res) => {
 
 router.get('/articles/show', async (req, res) => {
   try {
-    await db.query(
-      'select id, title from articles',
-      (error: string, result: { id: number; title: string; contents: string }) => {
-        res.status(200).json({
-          result: true,
-          main: result,
-        });
-      },
-    );
+    await db.query('select id, title from articles', (error: string, result: { id: number; title: string }) => {
+      res.status(200).json({
+        result: true,
+        main: result,
+      });
+    });
   } catch (error) {
     res.json(401).json({
       result: false,

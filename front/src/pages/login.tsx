@@ -4,19 +4,20 @@ import axios from 'axios';
 import { Input } from 'antd';
 
 const Login = () => {
-  console.log('로그인 화면 렌더링');
   const [userID, setUserID] = useInput('');
   const [password, setPassword] = useInput('');
 
   const sendLogin = () => {
     axios
-      .post('http://localhost:1000/api/users/login', {
-        userID: userID,
-        password: password,
-      })
+      .post(
+        'http://localhost:1000/api/users/login',
+        {
+          userID: userID,
+          password: password,
+        },
+        { withCredentials: true },
+      )
       .then(function (response) {
-        localStorage.setItem('isLogin', response.data.token);
-        sessionStorage.setItem('isLogin', response.data.session);
         window.location.href = '/';
       })
       .catch(function (err) {
