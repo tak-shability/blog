@@ -26,6 +26,7 @@ router.post('/articles/post', auth, async (req, res) => {
 });
 
 router.get('/articles/show', async (req, res) => {
+  console.log('req.query: ', req.query);
   try {
     await db.query('select id, title from articles', (error: string, result: { id: number; title: string }) => {
       res.status(200).json({

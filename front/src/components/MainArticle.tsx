@@ -6,7 +6,7 @@ const MainAtricles = () => {
   const [articles, setArticles] = useState(new Array());
   useEffect(() => {
     axios
-      .get('http://localhost:1000/api/articles/show', { withCredentials: true })
+      .get('http://localhost:1000/api/articles/show?test=1', { withCredentials: true })
       .then(function (response) {
         setArticles(response?.data.main);
       })
